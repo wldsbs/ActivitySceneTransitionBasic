@@ -93,7 +93,6 @@ class MainActivity : AppCompatActivity() {
     /**
      * [android.widget.BaseAdapter] which displays items.
      */
-    @Suppress("NAME_SHADOWING")
     private inner class GridAdapter : BaseAdapter() {
         override fun getCount(): Int {
             return Item.ITEMS.size
