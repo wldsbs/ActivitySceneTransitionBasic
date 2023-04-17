@@ -13,150 +13,134 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.example.android.activityscenetransitionbasic
 
-package com.example.android.activityscenetransitionbasic;
-
-import android.os.Build;
-import android.os.Bundle;
-import android.transition.Transition;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
-
-import com.squareup.picasso.Picasso;
+import android.os.Build
+import android.os.Bundle
+import android.transition.Transition
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import com.squareup.picasso.Picasso
 
 /**
- * Our secondary Activity which is launched from {@link MainActivity}. Has a simple detail UI
+ * Our secondary Activity which is launched from [MainActivity]. Has a simple detail UI
  * which has a large banner image, title and body text.
  */
-public class DetailActivity extends AppCompatActivity {
-
-    // Extra name for the ID parameter
-    public static final String EXTRA_PARAM_ID = "detail:_id";
-
-    // View name of the header image. Used for activity scene transitions
-    public static final String VIEW_NAME_HEADER_IMAGE = "detail:header:image";
-
-    // View name of the header title. Used for activity scene transitions
-    public static final String VIEW_NAME_HEADER_TITLE = "detail:header:title";
-
-    private ImageView mHeaderImageView;
-    private TextView mHeaderTitle;
-
-    private Item mItem;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.details);
+class DetailActivity : AppCompatActivity() {
+    private lateinit var mHeaderImageView: ImageView
+    private lateinit var mHeaderTitle: TextView
+    private var mItem: Item? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.details)
 
         // Retrieve the correct Item instance, using the ID provided in the Intent
-        mItem = Item.getItem(getIntent().getIntExtra(EXTRA_PARAM_ID, 0));
-
-        mHeaderImageView = findViewById(R.id.imageview_header);
-        mHeaderTitle = findViewById(R.id.textview_title);
+        mItem = Item.getItem(intent.getIntExtra(EXTRA_PARAM_ID, 0))
+        mHeaderImageView = findViewById(R.id.imageview_header)
+        mHeaderTitle = findViewById(R.id.textview_title)
 
         // BEGIN_INCLUDE(detail_set_view_name)
         /*
          * Set the name of the view's which will be transition to, using the static values above.
          * This could be done in the layout XML, but exposing it via static variables allows easy
          * querying from other Activities
-         */
-        ViewCompat.setTransitionName(mHeaderImageView, VIEW_NAME_HEADER_IMAGE);
-        ViewCompat.setTransitionName(mHeaderTitle, VIEW_NAME_HEADER_TITLE);
+         */ViewCompat.setTransitionName(mHeaderImageView, VIEW_NAME_HEADER_IMAGE)
+        ViewCompat.setTransitionName(mHeaderTitle, VIEW_NAME_HEADER_TITLE)
         // END_INCLUDE(detail_set_view_name)
-
-        loadItem();
+        loadItem()
     }
 
-    private void loadItem() {
+    private fun loadItem() {
         // Set the title TextView to the item's name and author
-        mHeaderTitle.setText(getString(R.string.image_header, mItem.getName(), mItem.getAuthor()));
-
+        mHeaderTitle.text = getString(R.string.image_header, mItem!!.name, mItem!!.author)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && addTransitionListener()) {
             // If we're running on Lollipop and we have added a listener to the shared element
             // transition, load the thumbnail. The listener will load the full-size image when
             // the transition is complete.
-            loadThumbnail();
+            loadThumbnail()
         } else {
             // If all other cases we should just load the full-size image now
-            loadFullSizeImage();
+            loadFullSizeImage()
         }
     }
 
     /**
-     * Load the item's thumbnail image into our {@link ImageView}.
+     * Load the item's thumbnail image into our [ImageView].
      */
-    private void loadThumbnail() {
-        Picasso.with(mHeaderImageView.getContext())
-                .load(mItem.getThumbnailUrl())
-                .noFade()
-                .into(mHeaderImageView);
+    private fun loadThumbnail() {
+        Picasso.with(mHeaderImageView.context)
+            .load(mItem!!.thumbnailUrl)
+            .noFade()
+            .into(mHeaderImageView)
     }
 
     /**
-     * Load the item's full-size image into our {@link ImageView}.
+     * Load the item's full-size image into our [ImageView].
      */
-    private void loadFullSizeImage() {
-        Picasso.with(mHeaderImageView.getContext())
-                .load(mItem.getPhotoUrl())
-                .noFade()
-                .noPlaceholder()
-                .into(mHeaderImageView);
+    private fun loadFullSizeImage() {
+        Picasso.with(mHeaderImageView.context)
+            .load(mItem!!.photoUrl)
+            .noFade()
+            .noPlaceholder()
+            .into(mHeaderImageView)
     }
 
     /**
-     * Try and add a {@link Transition.TransitionListener} to the entering shared element
-     * {@link Transition}. We do this so that we can load the full-size image after the transition
+     * Try and add a [Transition.TransitionListener] to the entering shared element
+     * [Transition]. We do this so that we can load the full-size image after the transition
      * has completed.
      *
      * @return true if we were successful in adding a listener to the enter transition
      */
     @RequiresApi(21)
-    private boolean addTransitionListener() {
-        final Transition transition = getWindow().getSharedElementEnterTransition();
-
+    private fun addTransitionListener(): Boolean {
+        val transition = window.sharedElementEnterTransition
         if (transition != null) {
             // There is an entering shared element transition so add a listener to it
-            transition.addListener(new Transition.TransitionListener() {
-                @Override
-                public void onTransitionEnd(Transition transition) {
+            transition.addListener(object : Transition.TransitionListener {
+                override fun onTransitionEnd(transition: Transition) {
                     // As the transition has ended, we can now load the full-size image
-                    loadFullSizeImage();
+                    loadFullSizeImage()
 
                     // Make sure we remove ourselves as a listener
-                    transition.removeListener(this);
+                    transition.removeListener(this)
                 }
 
-                @Override
-                public void onTransitionStart(Transition transition) {
+                override fun onTransitionStart(transition: Transition) {
                     // No-op
                 }
 
-                @Override
-                public void onTransitionCancel(Transition transition) {
+                override fun onTransitionCancel(transition: Transition) {
                     // Make sure we remove ourselves as a listener
-                    transition.removeListener(this);
+                    transition.removeListener(this)
                 }
 
-                @Override
-                public void onTransitionPause(Transition transition) {
+                override fun onTransitionPause(transition: Transition) {
                     // No-op
                 }
 
-                @Override
-                public void onTransitionResume(Transition transition) {
+                override fun onTransitionResume(transition: Transition) {
                     // No-op
                 }
-            });
-            return true;
+            })
+            return true
         }
 
         // If we reach here then we have not added a listener
-        return false;
+        return false
     }
 
+    companion object {
+        // Extra name for the ID parameter
+        const val EXTRA_PARAM_ID = "detail:_id"
+
+        // View name of the header image. Used for activity scene transitions
+        const val VIEW_NAME_HEADER_IMAGE = "detail:header:image"
+
+        // View name of the header title. Used for activity scene transitions
+        const val VIEW_NAME_HEADER_TITLE = "detail:header:title"
+    }
 }
