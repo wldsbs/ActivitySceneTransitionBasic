@@ -42,6 +42,12 @@ class MainActivity : AppCompatActivity() {
         grid.onItemClickListener = mOnItemClickListener
         val adapter = GridAdapter()
         grid.adapter = adapter
+
+        val button = findViewById<Button>(R.id.btn_draw)
+        button.setOnClickListener {
+            val intent = Intent(this, DrawActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private val mOnItemClickListener = OnItemClickListener { adapterView, view, position, id ->
