@@ -25,6 +25,9 @@
         <item name="android:windowSharedElementExitTransition" tools:ignore="NewApi">
             @transition/grid_detail_transition
         </item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <!-- Widget styling -->
