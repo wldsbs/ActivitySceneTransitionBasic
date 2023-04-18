@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         applicationId 'com.example.android.activityscenetransitionbasic'
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 33
         versionCode 1
         versionName '1.0'
@@ -38,4 +38,5 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.squareup.picasso:picasso:2.4.0'
     implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
