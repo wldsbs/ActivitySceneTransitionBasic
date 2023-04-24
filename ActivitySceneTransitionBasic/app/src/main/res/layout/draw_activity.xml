@@ -21,37 +21,23 @@
         android:id="@+id/rg_lines"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:checkedButton="@id/rb_bl"
+        android:checkedButton="@id/rb_top"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_lineInfo">
 
         <RadioButton
-            android:id="@+id/rb_bl"
+            android:id="@+id/rb_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="bottom_left"
+            android:text="top"
             android:textSize="20sp" />
 
         <RadioButton
-            android:id="@+id/rb_br"
+            android:id="@+id/rb_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="bottom_right"
-            android:textSize="20sp" />
-
-        <RadioButton
-            android:id="@+id/rb_tl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="top_left"
-            android:textSize="20sp" />
-
-        <RadioButton
-            android:id="@+id/rb_tr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="top_right"
+            android:text="bottom"
             android:textSize="20sp" />
 
         <RadioButton
@@ -88,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:checkedButton="@id/rb_bl"
+        android:checkedButton="@id/rb_red"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_lineInfo">

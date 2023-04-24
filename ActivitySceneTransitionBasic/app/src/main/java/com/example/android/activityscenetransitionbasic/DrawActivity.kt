@@ -45,11 +45,9 @@ class DrawActivity : AppCompatActivity() {
 
         findViewById<RadioGroup>(R.id.rg_lines).setOnCheckedChangeListener { _, id ->
             radioButton = when (id) {
-                R.id.rb_bl -> 1
-                R.id.rb_br -> 2
-                R.id.rb_tl -> 3
-                R.id.rb_tr -> 4
-                R.id.rb_reset -> 5
+                R.id.rb_top -> 1
+                R.id.rb_bottom -> 2
+                R.id.rb_reset -> 3
                 else -> 0
             }
         }
@@ -87,8 +85,6 @@ class DrawActivity : AppCompatActivity() {
                     result = true
                 }
             }
-
-
         }
         return result
     }
@@ -196,27 +192,29 @@ class DrawActivity : AppCompatActivity() {
                     topRPoint.x = x + 250
                     topRPoint.y = y
                 }
-                // bottom | left
                 1 -> {
-                    bottomLPoint.x = x
-                    bottomLPoint.y = y
-                }
-                // bottom | right
-                2 -> {
-                    bottomRPoint.x = x
-                    bottomRPoint.y = y
-                }
-                // top | left
-                3 -> {
-                    topLPoint.x = x
+                    val diff: Float = if (x >= (canvas.width / 2).toFloat()) {
+                        x - canvas.width / 2
+                    } else {
+                        canvas.width / 2 - x
+                    }
+                    topRPoint.x = (canvas.width / 2).toFloat() + diff
+                    topLPoint.x = (canvas.width / 2).toFloat() - diff
                     topLPoint.y = y
-                }
-                // top | right
-                4 -> {
-                    topRPoint.x = x
                     topRPoint.y = y
                 }
-                5 -> {
+                2 -> {
+                    val diff: Float = if (x >= (canvas.width / 2).toFloat()) {
+                        x - canvas.width / 2
+                    } else {
+                        canvas.width / 2 - x
+                    }
+                    bottomRPoint.x = (canvas.width / 2).toFloat() + diff
+                    bottomLPoint.x = (canvas.width / 2).toFloat() - diff
+                    bottomLPoint.y = y
+                    bottomRPoint.y = y
+                }
+                3 -> {
                     topLPoint =
                         PointF((canvas.width / 5 * 2).toFloat(), (canvas.height / 4).toFloat())
                     topRPoint =
