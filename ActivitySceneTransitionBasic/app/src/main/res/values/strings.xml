@@ -59,4 +59,7 @@
     <string name="left">l</string>
     <string name="right">r</string>
 
+    <string name="point">
+        "topL: (%1$s, %2$s)\ntopR: (%3$s, %4$s)\nbottomL (%5$s, %6$s)\nbottomR: (%7$s, %8$s)"
+    </string>
 </resources>
