@@ -26,8 +26,13 @@ class AckermanActivity : AppCompatActivity() {
     private lateinit var circleCenterPoint: PointF
 
     private var radius: Float = 0f  // 자동차의 두 앞바퀴 중심에서의 회전반경
-    private var rate = 5          // 비율 변환에 사용(실제 자동차 -> AVN)
-    private var carHalfLength = 200
+    private var rate = 20          // 비율 변환에 사용(실제 자동차 -> AVN)
+    private var carHalfLength = 50
+
+//    private var carTrack = 1614     // 윤거
+//    private var wheelbase = 2845    // 축거(축간거리)
+//    private var kingPinDiff = 160   // 타이어 중심과 킹핀 사이 거리
+//    private var carHalfLength = carTrack/2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +70,7 @@ class AckermanActivity : AppCompatActivity() {
                     circleCenterPoint = PointF(carCenterPoint.x - radius, carCenterPoint.y)
                     drawLeftRotation(progress, radius)
                 }
+                // todo: progress == 0일 경우
 
                 binding.tvCenterPoint.text = "(${circleCenterPoint.x}, ${circleCenterPoint.y})"
             }
@@ -81,11 +87,45 @@ class AckermanActivity : AppCompatActivity() {
             Bitmap.createBitmap(deviceWidth, deviceHeight, Bitmap.Config.ARGB_8888)
         canvas = Canvas(bitmap)
 
-        carCenterPoint = PointF((canvas.width / 2).toFloat(), (canvas.height - 100).toFloat())
-        carLeftPoint = PointF(carCenterPoint.x - 300, carCenterPoint.y)
-        carRightPoint = PointF(carCenterPoint.x + 300, carCenterPoint.y)
+//        carCenterPoint = PointF((canvas.width / 2).toFloat(), (canvas.height - 100).toFloat())
+        carCenterPoint = PointF((deviceWidth / 2).toFloat(), deviceHeight.toFloat())
+        carLeftPoint = PointF(carCenterPoint.x - 100, carCenterPoint.y)
+        carRightPoint = PointF(carCenterPoint.x + 100, carCenterPoint.y)
     }
+    private fun setBitmap(): Matrix {
+        val src = floatArrayOf(
+            0f, 0f,         // top left
+            deviceWidth.toFloat(), 0f,        // top right
+            deviceWidth.toFloat() * 0.6f, deviceHeight.toFloat(),     // bottom right
+            deviceWidth.toFloat() * 0.4f, deviceHeight.toFloat()       // bottom left
+        )
+        val nsrc = floatArrayOf(
+            0f, 0f,         // top left
+            deviceWidth.toFloat(), 0f,        // top right
+            carRightPoint.x, deviceHeight.toFloat(),     // bottom right
+            carLeftPoint.x, deviceHeight.toFloat()       // bottom left
+        )
 
+        // 모양은 예쁜데 특정 구간 안그려짐
+        val dst = floatArrayOf(
+            deviceWidth.toFloat() * 0.3f, 0f,                       // top left
+            deviceWidth.toFloat() * 0.7f, 0f,                       // top right
+            deviceWidth.toFloat(), deviceHeight.toFloat(),          // bottom right
+            0.0f, deviceHeight.toFloat(),                           // bottom left
+        )
+
+        // 다 잘 그려지고 애커만 적용되는데 너무 쪼끄매,,
+        val ndst = floatArrayOf(
+            0f, 50f,                       // top left
+            deviceWidth.toFloat()-50f, 50f,                       // top right
+            deviceWidth.toFloat()-50f, deviceHeight.toFloat(),          // bottom right
+            0f, deviceHeight.toFloat(),                           // bottom left
+        )
+        val m = Matrix().apply {
+            setPolyToPoly(nsrc, 0, ndst, 0, 4)
+        }
+        return m
+    }
     private fun drawRightRotation(progress: Int, radius: Float) {
         bitmap = Bitmap.createBitmap(deviceWidth, deviceHeight, Bitmap.Config.ARGB_8888)
         canvas = Canvas(bitmap)
@@ -112,6 +152,9 @@ class AckermanActivity : AppCompatActivity() {
 //                paint
 //            )
 //        }
+
+        canvas.save()
+        canvas.setMatrix(setBitmap())
 
         //left line
         val leftRadius = radius + carHalfLength
