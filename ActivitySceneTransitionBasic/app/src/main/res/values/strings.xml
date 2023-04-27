@@ -62,4 +62,9 @@
     <string name="point">
         "topL: (%1$s, %2$s)\ntopR: (%3$s, %4$s)\nbottomL (%5$s, %6$s)\nbottomR: (%7$s, %8$s)"
     </string>
+    <string name="bottom">bottom</string>
+    <string name="reset">reset</string>
+    <string name="top">top</string>
+    <string name="yellow">yellow</string>
+    <string name="red">red</string>
 </resources>
